@@ -20,13 +20,10 @@ exports.addProduct = (req, res) => {
     fs.readFileSync(`${__dirname}/../data/products.json`)
   );
   products.push(req.body);
-  fs.writeFileSync(`${__dirname}/data/products.json`, JSON.stringify(products));
+  fs.writeFileSync(`${__dirname}/../data/products.json`, JSON.stringify(products));
 
   res.status(200).json({
     status: "success",
-    data: {
-      products,
-    },
   });
 };
 
@@ -49,3 +46,15 @@ exports.getProductById = (req, res) => {
     });
   }
 };
+
+exports.borrarProductoId = (req, res) => { 
+  let productos = JSON.parse( fs.readFileSync(`${__dirname}/../data/products.json`) ); 
+const foundProduct = productos.find((p) => p.id == req.params.id); 
+  if (foundProduct) { 
+    productos = productos.filter((prod) => prod.id != req.params.id); 
+    fs.writeFileSync(`${__dirname}/../data/products.json`, JSON.stringify(productos)); 
+    res.status(204).json({ status: "success "}); 
+  } 
+  else 
+  { res.status(404).json({ status: "not found", }); 
+}};
